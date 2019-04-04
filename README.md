@@ -1,2 +1,0 @@
-# ReactFixedHeader
-Created with CodeSandbox

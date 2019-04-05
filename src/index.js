@@ -5,9 +5,10 @@ import { FixedMenuContext, FixedMenuContextProvider } from "./FixedMenu";
 import "./styles.css";
 
 const Header = function({ items }) {
-  const isFixed = useContext(FixedMenuContext);
+  const { isFixed, isMobile } = useContext(FixedMenuContext);
+
   return (
-    <nav className={isFixed ? "fixed" : ""}>
+    <nav className={`${isFixed ? "fixed" : ""} ${isMobile ? "mobile" : ""}`}>
       <ul style={isFixed ? { backgroundColor: "red" } : {}}>
         {items.map((v, i) => (
           <li key={i}>{v}</li>
@@ -20,7 +21,10 @@ const Header = function({ items }) {
 function App() {
   return (
     <div className="App">
-      <FixedMenuContextProvider limit={10}>
+      <FixedMenuContextProvider
+        limit={10}
+        mobileDetectionMediaQuery={"(max-width: 400px)"}
+      >
         <Header items={["tata"]} />
       </FixedMenuContextProvider>
 

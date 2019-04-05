@@ -12,23 +12,21 @@ try {
   window.removeEventListener("testPassive", null, opts);
 } catch (e) {}
 
-const getPosition = () => ({
-  x: window.pageXOffset,
-  y: window.pageYOffset
-});
+const getIsFixed = limit => window.pageYOffset > limit;
 
 const defaultOptions = {
-  throttle: 100
+  throttle: 100,
+  limit: 10
 };
 
-export function useWindowScrollPosition(options) {
+export function useIsFixedPosition(options) {
   const opts = Object.assign({}, defaultOptions, options);
 
-  const [position, setPosition] = useState(getPosition());
+  const [isFixed, setIsFixed] = useState(getIsFixed(opts.limit));
 
   useEffect(() => {
     const handleScroll = _throttle(() => {
-      setPosition(getPosition());
+      setIsFixed(getIsFixed(opts.limit));
     }, opts.throttle);
 
     window.addEventListener(
@@ -42,5 +40,5 @@ export function useWindowScrollPosition(options) {
     };
   }, []);
 
-  return position;
+  return isFixed;
 }

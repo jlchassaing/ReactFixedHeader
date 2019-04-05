@@ -1,13 +1,14 @@
-import React, { Children } from "react";
+import React, { useContext } from "react";
 import ReactDOM from "react-dom";
-import useWindowScrollPosition from "./WindowScrollPosition";
+import { FixedMenuContext, FixedMenuContextProvider } from "./FixedMenu";
 
 import "./styles.css";
 
-const Header = function({ items, fixed }) {
+const Header = function({ items }) {
+  const isFixed = useContext(FixedMenuContext);
   return (
-    <nav>
-      <ul style={fixed ? { backgroundColor: "red" } : {}}>
+    <nav className={isFixed ? "fixed" : ""}>
+      <ul style={isFixed ? { backgroundColor: "red" } : {}}>
         {items.map((v, i) => (
           <li key={i}>{v}</li>
         ))}
@@ -16,24 +17,12 @@ const Header = function({ items, fixed }) {
   );
 };
 
-const FixedHeader = function({ scrollLimit, children }) {
-  const position = useWindowScrollPosition({ x: 0, y: 0 });
-  const fixed = position.y > scrollLimit;
-  return (
-    <header className={fixed ? "fixed" : ""}>
-      {React.Children.map(children, (child, index) =>
-        React.cloneElement(child, { fixed })
-      )}
-    </header>
-  );
-};
-
 function App() {
   return (
     <div className="App">
-      <FixedHeader scrollLimit={10}>
+      <FixedMenuContextProvider limit={10}>
         <Header items={["tata"]} />
-      </FixedHeader>
+      </FixedMenuContextProvider>
 
       <h1>Hello CodeSandbox </h1>
       <h2>Start editing to see some magic happen!</h2>
